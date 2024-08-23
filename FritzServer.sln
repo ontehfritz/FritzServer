@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{456417A4-BB7C-44CC-8B92-F4C662584051}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A6F394F0-EB60-42C7-BA30-2B166911453E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Www", "src\Www\Www.csproj", "{EC38BD74-BC1F-4EFD-9390-40D50F3195A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EC38BD74-BC1F-4EFD-9390-40D50F3195A9} = {456417A4-BB7C-44CC-8B92-F4C662584051}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC38BD74-BC1F-4EFD-9390-40D50F3195A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC38BD74-BC1F-4EFD-9390-40D50F3195A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC38BD74-BC1F-4EFD-9390-40D50F3195A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC38BD74-BC1F-4EFD-9390-40D50F3195A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
