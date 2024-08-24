@@ -22,15 +22,15 @@ public class Request
     public static Request Parse(string request)
     {
         var reader = new StringReader(request);
-        var firstLine = reader.ReadLine().Split(' ');
-        if (firstLine.Length != 3)
+        var requestLine = reader.ReadLine().Split(' ');
+        if (requestLine.Length != 3)
         {
             throw new Exception("Invalid response");
         }
 
-        var verb = firstLine[0];
-        var uri = firstLine[1];
-        var version = firstLine[2];
+        var verb = requestLine[0];
+        var uri = requestLine[1];
+        var version = requestLine[2];
         var headers = new Headers();
         string? line;
         while ((line = reader.ReadLine()) != string.Empty)

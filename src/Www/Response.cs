@@ -4,21 +4,28 @@ namespace Www;
 
 public class Response
 {
-    private Headers _headers;
-    private string _body;
+    public string Version { get; init; }
+    public int Status { get; init; }
+    public string Description { get; init; }
+    public Headers Headers { get; init; }
+    public string Body { get; init; }
 
-    public Response(Headers headers, string body)
+    public Response(string version, int status, string description, Headers headers, string body)
     {
-        _headers = headers;
-        _body = body;
+        Version = version;
+        Status = status;
+        Description = description;
+        Headers = headers;
+        Body = body;
     }
 
     public string Get()
     {
         var builder = new StringBuilder();
-        builder.Append(_headers.Get());
+        builder.AppendLine($"{Version} {Status} {Description}");
+        builder.Append(Headers.Get());
         builder.AppendLine(string.Empty);
-        builder.Append(_body);
+        builder.Append(Body);
         return builder.ToString();
     }
 }
