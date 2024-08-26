@@ -1,3 +1,6 @@
 {
-   
+  "domain": "localhost",
+  "port": 666,
+  "rootDir": "/Users/fritz/wwwtest",
+  "index": "index.html"
 }

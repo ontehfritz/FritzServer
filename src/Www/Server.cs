@@ -1,18 +1,21 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 
 namespace Www;
 
 public class Server
 {
     private TcpListener _listener { get; }
-    public Server()
+    private Config _config; 
+    public Server(Config config)
     {
-        _listener = new TcpListener(new IPEndPoint(IPAddress.Any, 666));
+        _config = config;
+        _listener = new TcpListener(new IPEndPoint(IPAddress.Any, config.Port));
     }
 
-    public void Start()
+    public async Task Start()
     {
         _listener.Start();
         
@@ -23,7 +26,7 @@ public class Server
             Console.WriteLine("Connected!");
             var stream = client.GetStream();
             var request = ProcessRequest(stream);
-            var response = ProcessResponse(request);
+            var response = await ProcessResponse(request);
             
             var msg = System.Text.Encoding.ASCII.GetBytes(response.Get());
             stream.Write(msg, 0, msg.Length);
@@ -43,7 +46,7 @@ public class Server
         
         while (numberOfBytesRead > 0)
         {
-            message.Append(Encoding.Unicode.GetString(myReadBuffer, 0, numberOfBytesRead));
+            message.Append(Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
             Console.Write(message.ToString());
             numberOfBytesRead = stream.DataAvailable ? stream.Read(myReadBuffer, 0, myReadBuffer.Length) : 0;
         }
@@ -51,17 +54,19 @@ public class Server
         return Request.Parse(message.ToString());
     }
     
-    private Response ProcessResponse(Request request)
+    private async Task<Response> ProcessResponse(Request request)
     {
         var headers = new Headers();
         headers.Add("Content-Type", "text/html; charset=utf-8");
-        var body = string.Empty;
+        using StreamReader reader = new("/Users/fritz/wwwtest/index.html");
+        var body = await reader.ReadToEndAsync();
+        
         if (body.Length > 0)
         {
-            headers.Add("Content-Length",  Encoding.Unicode.GetByteCount(body).ToString());
+            headers.Add("Content-Length",  Encoding.ASCII.GetByteCount(body).ToString());
         }
 
-        var response = new Response("HTTP/1.1", 200, "Success", headers, "");
+        var response = new Response("HTTP/1.1", 200, "Success", headers, body);
         return response;
     }
 }
