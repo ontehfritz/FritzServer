@@ -22,13 +22,13 @@ public class Server
         while (true)
         {
             Console.Write("Waiting for a connection... ");
-            using TcpClient client = _listener.AcceptTcpClient();
+            using TcpClient client = await _listener.AcceptTcpClientAsync();
             Console.WriteLine("Connected!");
             var stream = client.GetStream();
-            var request = ProcessRequest(stream);
+            var request = await ProcessRequest(stream);
             var response = await ProcessResponse(request);
             
-            var msg = System.Text.Encoding.ASCII.GetBytes(response.Get());
+            var msg = Encoding.ASCII.GetBytes(response.Get());
             stream.Write(msg, 0, msg.Length);
         }
     }
@@ -38,17 +38,17 @@ public class Server
         _listener.Stop();   
     }
 
-    private Request ProcessRequest(NetworkStream stream)
+    private async Task<Request> ProcessRequest(NetworkStream stream)
     {
         var myReadBuffer = new byte[1024];
         var message = new StringBuilder();
-        var numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
+        var numberOfBytesRead = await stream.ReadAsync(myReadBuffer);
         
         while (numberOfBytesRead > 0)
         {
             message.Append(Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
             Console.Write(message.ToString());
-            numberOfBytesRead = stream.DataAvailable ? stream.Read(myReadBuffer, 0, myReadBuffer.Length) : 0;
+            numberOfBytesRead = stream.DataAvailable ? await stream.ReadAsync(myReadBuffer) : 0;
         }
         
         return Request.Parse(message.ToString());
@@ -58,7 +58,7 @@ public class Server
     {
         var headers = new Headers();
         headers.Add("Content-Type", "text/html; charset=utf-8");
-        using StreamReader reader = new("/Users/fritz/wwwtest/index.html");
+        using StreamReader reader = new($"{_config.RootDir}{request.Uri}");
         var body = await reader.ReadToEndAsync();
         
         if (body.Length > 0)
